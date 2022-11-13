@@ -4,7 +4,11 @@ import { history } from "../..";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
+// Get backend url.
 axios.defaults.baseURL = 'http://localhost:5000/api/';
+// Allow creditials.
+axios.defaults.withCredentials = true;
+
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -41,6 +45,7 @@ axios.interceptors.response.use(async response => {
     return Promise.reject(error.response);
 })
 
+// Generic http requests.
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
@@ -48,11 +53,20 @@ const requests = {
     delete: (url: string) => axios.delete(url).then(responseBody),
 }
 
+// Catalog Api routes
 const Catalog = {
     list: () => requests.get('products'),
     details: (id: number) => requests.get(`products/${id}`)
 }
 
+// Basket Api routes 
+const Basket = {
+    get: () => requests.get('basket'),
+    addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
+    removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`)
+}
+
+// Test error routes
 const TestErrors = {
     get400Error: () => requests.get('buggy/bad-request'),
     get401Error: () => requests.get('buggy/unauthorised'),
@@ -63,7 +77,8 @@ const TestErrors = {
 
 const agent = {
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 export default agent;
