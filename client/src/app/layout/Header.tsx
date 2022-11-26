@@ -32,8 +32,10 @@ const navStyles = {
 }
 
 export default function Header({ darkMode, handleThemeChange }: Props) {
+    // Get the basket from the redux store.
     const { basket } = useAppSelector(state => state.basket);
-    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
+    // count the items in the basket.
+    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
         <AppBar position='static' sx={{ mb: 4 }}>

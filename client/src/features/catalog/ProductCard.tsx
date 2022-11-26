@@ -12,6 +12,7 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   const {status} = useAppSelector(state => state.basket);
+  // Use redux dispatch.
   const dispatch = useAppDispatch();
 
   return (

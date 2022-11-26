@@ -6,7 +6,9 @@ import { addBasketItemAsync, removeBasketItemAsync } from "./basketSlice";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 
 export default function BasketPage() {
+  // Use redux store.
   const { basket, status } = useAppSelector(state => state.basket);
+  // Use redux dispatch.
   const dispatch = useAppDispatch();
 
   if (!basket) return <Typography variant='h3'>Your basket is empty</Typography>
