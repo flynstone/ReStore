@@ -2,6 +2,7 @@ import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typogr
 import { Link, NavLink } from "react-router-dom";
 import { ShoppingCart } from '@mui/icons-material';
 import { useAppSelector } from "../store/configureStore";
+import SignedInMenu from "./SignedInMenu";
 
 interface Props {
     darkMode: boolean;
@@ -34,8 +35,9 @@ const navStyles = {
 export default function Header({ darkMode, handleThemeChange }: Props) {
     // Get the basket from the redux store.
     const { basket } = useAppSelector(state => state.basket);
+    const { user } = useAppSelector(state => state.account);
     // count the items in the basket.
-    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+    const itemCount = basket?.items.reduce((sum: any, item) => sum + item.quantity, 0);
 
     return (
         <AppBar position='static' sx={{ mb: 4 }}>
@@ -65,18 +67,23 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                             <ShoppingCart />
                         </Badge>
                     </IconButton>
-                    <List sx={{ display: 'flex' }}>
-                        {rightLinks.map(({ title, path }) => (
-                            <ListItem
-                                component={NavLink}
-                                to={path}
-                                key={path}
-                                sx={navStyles}
-                            >
-                                {title.toUpperCase()}
-                            </ListItem>
-                        ))}
-                    </List>
+                    {user ? (
+                        <SignedInMenu />
+                    ) : (
+                        <List sx={{ display: 'flex' }}>
+                            {rightLinks.map(({ title, path }) => (
+                                <ListItem
+                                    component={NavLink}
+                                    to={path}
+                                    key={path}
+                                    sx={navStyles}
+                                >
+                                    {title.toUpperCase()}
+                                </ListItem>
+                            ))}
+                        </List>
+                    )}
+
                 </Box>
             </Toolbar>
         </AppBar>
